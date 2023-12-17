@@ -1,6 +1,6 @@
 ﻿# jojo-run-pygame
 
-pip install pygame
+# pip install pygame
 
 music and animations included
 

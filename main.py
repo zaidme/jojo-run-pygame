@@ -209,7 +209,7 @@ while True:
         screen.blit(game_name, game_name_rect)
         screen.blit(player_stand, player_stand_rect)
 
-        score_message = font.render(f'Your score:{final_score}', False, '#DFDD1E')
+        score_message = font.render(f'Your score:{final_score}     Press 1 to restart', False, '#DFDD1E')
         score_message_rect = score_message.get_rect(center=(600, 550))
 
         if final_score == 0:

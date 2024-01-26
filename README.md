@@ -1,6 +1,14 @@
-# pip install pygame
+# jojo-run
 
-music and animations included
+> runner game developed using pygame
+
+## Development setup
+
+Clone this repo and install the following:
+ ```
+pip install pygame
+```
+Music included
 
 Screencaps:
 ![image](https://github.com/zaid42005/jojo-run-pygame/assets/66367657/d06a121e-1f15-4cf3-8a60-6253ed1f1351)

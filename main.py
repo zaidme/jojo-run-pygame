@@ -80,16 +80,16 @@ class Obstacle(pygame.sprite.Sprite):
             self.frames = [fly1, fly2]
             y_pos = 400
         else:
-            dio_1 = pygame.image.load('Visuals/graphics/dio/frame_00_delay-0.34s.gif').convert_alpha()
-            dio_2 = pygame.image.load('Visuals/graphics/dio/frame_02_delay-0.04s.gif').convert_alpha()
-            dio_3 = pygame.image.load('Visuals/graphics/dio/frame_03_delay-0.02s.gif').convert_alpha()
-            dio_4 = pygame.image.load('Visuals/graphics/dio/frame_04_delay-0.04s.gif').convert_alpha()
-            dio_6 = pygame.image.load('Visuals/graphics/dio/frame_06_delay-0.02s.gif').convert_alpha()
-            dio_8 = pygame.image.load('Visuals/graphics/dio/frame_08_delay-0.06s.gif').convert_alpha()
-            dio_9 = pygame.image.load('Visuals/graphics/dio/frame_09_delay-0.02s.gif').convert_alpha()
-            dio_10 = pygame.image.load('Visuals/graphics/dio/frame_10_delay-0.04s.gif').convert_alpha()
-            dio_12 = pygame.image.load('Visuals/graphics/dio/frame_12_delay-0.26s.gif').convert_alpha()
-            self.frames = [dio_1, dio_2, dio_3, dio_4, dio_6, dio_8, dio_9, dio_12]
+            dio_1 = pygame.image.load('Visuals/graphics/dio/frame_00.gif').convert_alpha()
+            dio_2 = pygame.image.load('Visuals/graphics/dio/frame_01.gif').convert_alpha()
+            dio_3 = pygame.image.load('Visuals/graphics/dio/frame_02.gif').convert_alpha()
+            dio_4 = pygame.image.load('Visuals/graphics/dio/frame_03.gif').convert_alpha()
+            dio_5 = pygame.image.load('Visuals/graphics/dio/frame_04.gif').convert_alpha()
+            dio_6 = pygame.image.load('Visuals/graphics/dio/frame_05.gif').convert_alpha()
+            dio_7 = pygame.image.load('Visuals/graphics/dio/frame_06.gif').convert_alpha()
+            dio_8 = pygame.image.load('Visuals/graphics/dio/frame_07.gif').convert_alpha()
+            dio_9 = pygame.image.load('Visuals/graphics/dio/frame_08.gif').convert_alpha()
+            self.frames = [dio_1, dio_2, dio_3, dio_4, dio_5 , dio_6, dio_7, dio_8, dio_9]
             y_pos = 645
 
         self.animation_index = 0

@@ -74,15 +74,15 @@ class Obstacle(pygame.sprite.Sprite):
             self.frames = [fly1, fly2]
             y_pos = 400
         else:
-            dio_1 = pygame.image.load('Visuals/graphics/dio/frame_00.gif').convert_alpha()
-            dio_2 = pygame.image.load('Visuals/graphics/dio/frame_01.gif').convert_alpha()
-            dio_3 = pygame.image.load('Visuals/graphics/dio/frame_02.gif').convert_alpha()
-            dio_4 = pygame.image.load('Visuals/graphics/dio/frame_03.gif').convert_alpha()
-            dio_5 = pygame.image.load('Visuals/graphics/dio/frame_04.gif').convert_alpha()
-            dio_6 = pygame.image.load('Visuals/graphics/dio/frame_05.gif').convert_alpha()
-            dio_7 = pygame.image.load('Visuals/graphics/dio/frame_06.gif').convert_alpha()
-            dio_8 = pygame.image.load('Visuals/graphics/dio/frame_07.gif').convert_alpha()
-            dio_9 = pygame.image.load('Visuals/graphics/dio/frame_08.gif').convert_alpha()
+            dio_1 = pygame.image.load('Visuals/graphics/Dio/frame_00.gif').convert_alpha()
+            dio_2 = pygame.image.load('Visuals/graphics/Dio/frame_01.gif').convert_alpha()
+            dio_3 = pygame.image.load('Visuals/graphics/Dio/frame_02.gif').convert_alpha()
+            dio_4 = pygame.image.load('Visuals/graphics/Dio/frame_03.gif').convert_alpha()
+            dio_5 = pygame.image.load('Visuals/graphics/Dio/frame_04.gif').convert_alpha()
+            dio_6 = pygame.image.load('Visuals/graphics/Dio/frame_05.gif').convert_alpha()
+            dio_7 = pygame.image.load('Visuals/graphics/Dio/frame_06.gif').convert_alpha()
+            dio_8 = pygame.image.load('Visuals/graphics/Dio/frame_07.gif').convert_alpha()
+            dio_9 = pygame.image.load('Visuals/graphics/Dio/frame_08.gif').convert_alpha()
             self.frames = [dio_1, dio_2, dio_3, dio_4, dio_5, dio_6, dio_7, dio_8, dio_9]
             y_pos = 645
 
@@ -154,7 +154,7 @@ async def main():
     jojo = pygame.transform.scale(jojo, (width_jojo / 12, height_jojo / 30))
     jojo_rec = jojo.get_rect(midbottom=[550, 200])
 
-    player_stand = pygame.image.load('Visuals/graphics/player/SeekPng.com_jojo-menacing-png_338390.png')
+    player_stand = pygame.image.load('Visuals/graphics/Player/SeekPng.com_jojo-menacing-png_338390.png')
     player_stand_rect = player_stand.get_rect(center=(600, 300))
 
     game_name = font.render('Jojo Run', False, '#DFDD1E')

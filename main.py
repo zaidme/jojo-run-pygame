@@ -34,7 +34,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.player_walk[self.player_index]
         self.rect = self.image.get_rect(midbottom=(100, 650))
         self.gravity = 0
-        self.jump_sound = pygame.mixer.Sound('Visuals/audio/Mario Jump Sound Effect.mp3')
+        self.jump_sound = pygame.mixer.Sound('Visuals/audio/Mario Jump Sound Effect.ogg')
 
     def player_input(self):
         keys = pygame.key.get_pressed()
@@ -132,7 +132,7 @@ async def main():
     start_time = 0
     final_score = 0
 
-    bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.mp3')
+    bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.ogg')
     bg_music.play(loops=-1).set_volume(0.01618033988749)
 
     screen = pygame.display.set_mode((w, h))

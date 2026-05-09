@@ -127,13 +127,15 @@ def collision_sprite(player, obstacle_group):
 
 async def main():
     pygame.init()
+    await asyncio.sleep(0)  # let JS finish binding the canvas after init
     w = 1200
     h = 677
 
     # Set up display first so we can show errors if loading fails
-    screen = pygame.display.set_mode((w, h), pygame.SCALED)
+    screen = pygame.display.set_mode((w, h))
     pygame.display.set_caption('Oh ho your approaching me?')
     clock = pygame.time.Clock()
+    await asyncio.sleep(0)  # let the canvas surface connect before first draw
 
     # Diagnostic: bright red for 2s — confirms the canvas is wired up
     screen.fill((255, 0, 0))

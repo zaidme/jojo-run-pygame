@@ -1,4 +1,5 @@
 import asyncio
+import traceback
 import pygame
 from sys import exit
 from random import randint
@@ -128,46 +129,70 @@ async def main():
     pygame.init()
     w = 1200
     h = 677
-    game_active = False
-    start_time = 0
-    final_score = 0
 
-    bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.ogg')
-    bg_music.set_volume(0.01618033988749)
-    bg_music.play(loops=-1)
-
+    # Set up display first so we can show errors if loading fails
     screen = pygame.display.set_mode((w, h))
     pygame.display.set_caption('Oh ho your approaching me?')
     clock = pygame.time.Clock()
-    font = pygame.font.Font('Visuals/font/Pixeltype.ttf', 50)
 
-    ground = pygame.image.load('Visuals/graphics/background.png')
+    try:
+        game_active = False
+        start_time = 0
+        final_score = 0
 
-    player = pygame.sprite.GroupSingle()
-    player.add(Player())
+        font = pygame.font.Font('Visuals/font/Pixeltype.ttf', 50)
+        ground = pygame.image.load('Visuals/graphics/background.png')
 
-    obstacle_group = pygame.sprite.Group()
+        player = pygame.sprite.GroupSingle()
+        player.add(Player())
 
-    jojo = pygame.image.load('Visuals/graphics/jojo.png').convert_alpha()
-    width_jojo = jojo.get_rect().width
-    height_jojo = jojo.get_rect().width
-    jojo = pygame.transform.scale(jojo, (width_jojo / 12, height_jojo / 30))
-    jojo_rec = jojo.get_rect(midbottom=[550, 200])
+        obstacle_group = pygame.sprite.Group()
 
-    player_stand = pygame.image.load('Visuals/graphics/Player/SeekPng.com_jojo-menacing-png_338390.png')
-    player_stand_rect = player_stand.get_rect(center=(600, 300))
+        jojo = pygame.image.load('Visuals/graphics/jojo.png').convert_alpha()
+        width_jojo = jojo.get_rect().width
+        height_jojo = jojo.get_rect().width
+        jojo = pygame.transform.scale(jojo, (width_jojo // 12, height_jojo // 30))
+        jojo_rec = jojo.get_rect(midbottom=[550, 200])
 
-    game_name = font.render('Jojo Run', False, '#DFDD1E')
-    game_name_rect = game_name.get_rect(center=(600, 100))
+        player_stand = pygame.image.load('Visuals/graphics/Player/SeekPng.com_jojo-menacing-png_338390.png')
+        player_stand_rect = player_stand.get_rect(center=(600, 300))
 
-    game_message = font.render('Press 1 to begin', False, '#DFDD1E')
-    game_message_rect = game_message.get_rect(center=(600, 500))
+        game_name = font.render('Jojo Run', False, '#DFDD1E')
+        game_name_rect = game_name.get_rect(center=(600, 100))
 
-    obstacle_timer = pygame.USEREVENT + 1
-    pygame.time.set_timer(obstacle_timer, 1400)
+        game_message = font.render('Press 1 to begin', False, '#DFDD1E')
+        game_message_rect = game_message.get_rect(center=(600, 500))
 
-    fly_animation_timer = pygame.USEREVENT + 3
-    pygame.time.set_timer(fly_animation_timer, 200)
+        obstacle_timer = pygame.USEREVENT + 1
+        pygame.time.set_timer(obstacle_timer, 1400)
+
+        fly_animation_timer = pygame.USEREVENT + 3
+        pygame.time.set_timer(fly_animation_timer, 200)
+
+        # Music starts only after all assets are confirmed loaded
+        bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.ogg')
+        bg_music.set_volume(0.01618033988749)
+        bg_music.play(loops=-1)
+
+    except Exception:
+        # Render the traceback to screen so we can see what failed
+        err = traceback.format_exc()
+        err_font = pygame.font.SysFont(None, 22)
+        screen.fill((10, 10, 30))
+        y = 10
+        for line in err.split('\n'):
+            for chunk in [line[i:i+90] for i in range(0, max(len(line), 1), 90)]:
+                surf = err_font.render(chunk, True, (255, 80, 80))
+                screen.blit(surf, (10, y))
+                y += 24
+                if y > h - 30:
+                    break
+        pygame.display.update()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+            await asyncio.sleep(0.5)
 
     while True:
         for event in pygame.event.get():

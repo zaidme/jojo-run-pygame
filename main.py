@@ -35,13 +35,13 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(100, 650))
         self.gravity = 0
         self.jump_sound = pygame.mixer.Sound('Visuals/audio/Mario Jump Sound Effect.ogg')
+        self.jump_sound.set_volume(0.03)
 
     def player_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and self.rect.bottom >= 645:
             self.gravity = -23
             self.jump_sound.play()
-            self.jump_sound.set_volume(0.03)
 
     def apply_gravity(self):
         self.gravity += 1
@@ -133,7 +133,8 @@ async def main():
     final_score = 0
 
     bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.ogg')
-    bg_music.play(loops=-1).set_volume(0.01618033988749)
+    bg_music.set_volume(0.01618033988749)
+    bg_music.play(loops=-1)
 
     screen = pygame.display.set_mode((w, h))
     pygame.display.set_caption('Oh ho your approaching me?')

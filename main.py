@@ -1,10 +1,7 @@
-import string
-
+import asyncio
 import pygame
 from sys import exit
 from random import randint
-
-from pip import main
 
 
 class Player(pygame.sprite.Sprite):
@@ -58,11 +55,8 @@ class Player(pygame.sprite.Sprite):
         self.player_animate()
 
     def player_animate(self):
-
-        # walking
         if self.rect.bottom < 650:
             self.image = self.player_jump
-
         else:
             self.player_index += 0.24
             if self.player_index > len(self.player_walk):
@@ -89,7 +83,7 @@ class Obstacle(pygame.sprite.Sprite):
             dio_7 = pygame.image.load('Visuals/graphics/dio/frame_06.gif').convert_alpha()
             dio_8 = pygame.image.load('Visuals/graphics/dio/frame_07.gif').convert_alpha()
             dio_9 = pygame.image.load('Visuals/graphics/dio/frame_08.gif').convert_alpha()
-            self.frames = [dio_1, dio_2, dio_3, dio_4, dio_5 , dio_6, dio_7, dio_8, dio_9]
+            self.frames = [dio_1, dio_2, dio_3, dio_4, dio_5, dio_6, dio_7, dio_8, dio_9]
             y_pos = 645
 
         self.animation_index = 0
@@ -111,18 +105,17 @@ class Obstacle(pygame.sprite.Sprite):
             self.kill()
 
 
-def display_score():
+def display_score(screen, font, start_time):
     currenttime = int(pygame.time.get_ticks() / 1000) - start_time
     score_surface = font.render(f'Score: {int(currenttime * 1.618033988749)}', False, 'Black')
     score_rect = score_surface.get_rect(center=(1100, 80))
     pygame.draw.rect(screen, '#EEA3D8', score_rect)
     pygame.draw.rect(screen, '#EEA3D8', score_rect, 15)
-
     screen.blit(score_surface, score_rect)
     return currenttime * 1.618033988749
 
 
-def collision_sprite():
+def collision_sprite(player, obstacle_group):
     if pygame.sprite.spritecollide(player.sprite, obstacle_group, False):
         obstacle_group.empty()
         player.sprite.rect.bottom = 650
@@ -131,95 +124,93 @@ def collision_sprite():
         return True
 
 
-pygame.init()
-w = 1200
-h = 677
-game_active = False
-start_time = 0
-final_score = 0
-bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.mp3')
-bg_music.play(loops = -1).set_volume(0.01618033988749)
-screen = pygame.display.set_mode((w, h))
-pygame.display.set_caption('Oh ho your approaching me?')
-clock = pygame.time.Clock()
-font = pygame.font.Font('Visuals/font/Pixeltype.ttf', 50)
-# surfaces
-ground = pygame.image.load('Visuals/graphics/background.png')
+async def main():
+    pygame.init()
+    w = 1200
+    h = 677
+    game_active = False
+    start_time = 0
+    final_score = 0
 
-# Groups
-player = pygame.sprite.GroupSingle()
-player.add(Player())
+    bg_music = pygame.mixer.Sound('Visuals/audio/Bloody Stream 2 bit.mp3')
+    bg_music.play(loops=-1).set_volume(0.01618033988749)
 
-obstacle_group = pygame.sprite.Group()
+    screen = pygame.display.set_mode((w, h))
+    pygame.display.set_caption('Oh ho your approaching me?')
+    clock = pygame.time.Clock()
+    font = pygame.font.Font('Visuals/font/Pixeltype.ttf', 50)
 
-jojo = pygame.image.load('Visuals/graphics/jojo.png').convert_alpha()
-width_jojo = jojo.get_rect().width
-height_jojo = jojo.get_rect().width
-jojo = pygame.transform.scale(jojo, (width_jojo / 12, height_jojo / 30))
-jojo_rec = jojo.get_rect(midbottom=[550, 200])
+    ground = pygame.image.load('Visuals/graphics/background.png')
 
-# Start Screen
-player_stand = pygame.image.load('Visuals/graphics/player/SeekPng.com_jojo-menacing-png_338390.png')
-player_stand_rect = player_stand.get_rect(center=(600, 300))
+    player = pygame.sprite.GroupSingle()
+    player.add(Player())
 
-game_name = font.render('Jojo Run', False, '#DFDD1E')
-game_name_rect = game_name.get_rect(center=(600, 100))
+    obstacle_group = pygame.sprite.Group()
 
-game_message = font.render('Press 1 to begin', False, '#DFDD1E')
-game_message_rect = game_message.get_rect(center=(600, 500))
+    jojo = pygame.image.load('Visuals/graphics/jojo.png').convert_alpha()
+    width_jojo = jojo.get_rect().width
+    height_jojo = jojo.get_rect().width
+    jojo = pygame.transform.scale(jojo, (width_jojo / 12, height_jojo / 30))
+    jojo_rec = jojo.get_rect(midbottom=[550, 200])
 
-# Timer
-obstacle_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(obstacle_timer, 1400)
+    player_stand = pygame.image.load('Visuals/graphics/player/SeekPng.com_jojo-menacing-png_338390.png')
+    player_stand_rect = player_stand.get_rect(center=(600, 300))
 
-fly_animation_timer = pygame.USEREVENT + 3
-pygame.time.set_timer(fly_animation_timer, 200)
+    game_name = font.render('Jojo Run', False, '#DFDD1E')
+    game_name_rect = game_name.get_rect(center=(600, 100))
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+    game_message = font.render('Press 1 to begin', False, '#DFDD1E')
+    game_message_rect = game_message.get_rect(center=(600, 500))
+
+    obstacle_timer = pygame.USEREVENT + 1
+    pygame.time.set_timer(obstacle_timer, 1400)
+
+    fly_animation_timer = pygame.USEREVENT + 3
+    pygame.time.set_timer(fly_animation_timer, 200)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if game_active:
+                if event.type == obstacle_timer:
+                    if randint(0, 2):
+                        obstacle_group.add(Obstacle('dio'))
+                    else:
+                        obstacle_group.add(Obstacle('fly'))
+            else:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
+                    game_active = True
+                    start_time = int(pygame.time.get_ticks() / 1000)
 
         if game_active:
+            screen.blit(ground, (0, 0))
+            screen.blit(jojo, jojo_rec)
+            final_score = int(display_score(screen, font, start_time))
 
-            if event.type == obstacle_timer:
-                if randint(0, 2):
-                    obstacle_group.add(Obstacle('dio'))
-                else:
-                    obstacle_group.add(Obstacle('fly'))
+            player.draw(screen)
+            player.update()
+            obstacle_group.draw(screen)
+            obstacle_group.update()
+            game_active = collision_sprite(player, obstacle_group)
         else:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
-                game_active = True
-                start_time = int(pygame.time.get_ticks() / 1000)
+            screen.fill((94, 129, 162))
+            screen.blit(game_name, game_name_rect)
+            screen.blit(player_stand, player_stand_rect)
 
-    if game_active:
-        # display the snail and player rectangles and surfaces
-        screen.blit(ground, (0, 0))
-        screen.blit(jojo, jojo_rec)
-        final_score = int(display_score())
+            score_message = font.render(f'Your score:{final_score}     Press 1 to restart', False, '#DFDD1E')
+            score_message_rect = score_message.get_rect(center=(600, 550))
 
-        player.draw(screen)
-        player.update()
-        obstacle_group.draw(screen)
-        obstacle_group.update()
-        game_active = collision_sprite()
-    else:
-        screen.fill((94, 129, 162))
-        screen.blit(game_name, game_name_rect)
-        screen.blit(player_stand, player_stand_rect)
+            if final_score == 0:
+                screen.blit(game_message, game_message_rect)
+            else:
+                screen.blit(score_message, score_message_rect)
 
-        score_message = font.render(f'Your score:{final_score}     Press 1 to restart', False, '#DFDD1E')
-        score_message_rect = score_message.get_rect(center=(600, 550))
-
-        if final_score == 0:
-            screen.blit(game_message, game_message_rect)
-        else:
-
-            screen.blit(score_message, score_message_rect)
-
-    # maintain frame rate and update display
-    pygame.display.update()
-    clock.tick(60)
+        pygame.display.update()
+        clock.tick(60)
+        await asyncio.sleep(0)
 
 
+asyncio.run(main())

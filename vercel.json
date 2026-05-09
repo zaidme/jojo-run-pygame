@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pip install pygbag && python -m pygbag --build main.py",
+  "outputDirectory": "build/web",
+  "framework": null
+}

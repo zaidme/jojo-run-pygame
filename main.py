@@ -131,9 +131,14 @@ async def main():
     h = 677
 
     # Set up display first so we can show errors if loading fails
-    screen = pygame.display.set_mode((w, h))
+    screen = pygame.display.set_mode((w, h), pygame.SCALED)
     pygame.display.set_caption('Oh ho your approaching me?')
     clock = pygame.time.Clock()
+
+    # Diagnostic: bright red for 2s — confirms the canvas is wired up
+    screen.fill((255, 0, 0))
+    pygame.display.flip()
+    await asyncio.sleep(2)
 
     try:
         game_active = False
@@ -175,19 +180,23 @@ async def main():
         bg_music.play(loops=-1)
 
     except Exception:
-        # Render the traceback to screen so we can see what failed
+        # Bright magenta background — impossible to miss even if font fails
         err = traceback.format_exc()
-        err_font = pygame.font.SysFont(None, 22)
-        screen.fill((10, 10, 30))
-        y = 10
-        for line in err.split('\n'):
-            for chunk in [line[i:i+90] for i in range(0, max(len(line), 1), 90)]:
-                surf = err_font.render(chunk, True, (255, 80, 80))
-                screen.blit(surf, (10, y))
-                y += 24
-                if y > h - 30:
-                    break
-        pygame.display.update()
+        screen.fill((220, 0, 220))
+        try:
+            err_font = pygame.font.Font('Visuals/font/Pixeltype.ttf', 22)
+        except Exception:
+            err_font = None
+        if err_font:
+            y = 10
+            for line in err.split('\n'):
+                for chunk in [line[i:i+90] for i in range(0, max(len(line), 1), 90)]:
+                    surf = err_font.render(chunk, True, (255, 255, 255))
+                    screen.blit(surf, (10, y))
+                    y += 24
+                    if y > h - 30:
+                        break
+        pygame.display.flip()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -234,7 +243,7 @@ async def main():
             else:
                 screen.blit(score_message, score_message_rect)
 
-        pygame.display.update()
+        pygame.display.flip()
         clock.tick(60)
         await asyncio.sleep(0)
 
